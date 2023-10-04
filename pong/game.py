@@ -30,6 +30,9 @@ class Game(object):
         self.player_one_paddle = Paddle(Rect(10,(screen_height-PADDLE_HEIGHT)/2, PADDLE_WIDTH, PADDLE_HEIGHT))
         self.player_two_paddle = None
     
+    def __str__(self):
+        return f"{self.id}"
+    
     def add_new_player(self):
         if self.player_two_paddle is not None:
             raise ValueError("Game already has two players")
@@ -66,7 +69,10 @@ class Game(object):
 
         if start:
             # If game started, update overall game logic
-            pass
+            if game_state.player_id == 0:
+                self.player_one_paddle.update(game_state.player_one_paddle_rect)
+            else:
+                self.player_two_paddle.update(game_state.player_two_paddle_rect)
         else:
             # If no opponent yet, only update first player position
             self.player_one_paddle.update(game_state.player_one_paddle_rect)
