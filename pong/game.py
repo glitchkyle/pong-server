@@ -14,8 +14,7 @@ class GameState(object):
     # Read and Write
     ball: Rect = None
     ball_velocity: tuple[int, int] = (0, 0)
-    player_one_paddle_rect: Rect = None
-    player_two_paddle_rect: Rect = None
+    paddle_rect: list[Rect] = [None,None]
     scores: tuple[int, int] = (0, 0)
 
 class Game(object):
@@ -27,18 +26,17 @@ class Game(object):
         screen_width, screen_height = screen_size
 
         self.ball = Ball(Rect(screen_width/2, screen_height/2, BALL_SIZE, BALL_SIZE))
-        self.player_one_paddle = Paddle(Rect(10,(screen_height-PADDLE_HEIGHT)/2, PADDLE_WIDTH, PADDLE_HEIGHT))
-        self.player_two_paddle = None
+        self.paddle:list[Paddle] = [Paddle(Rect(10,(screen_height-PADDLE_HEIGHT)/2, PADDLE_WIDTH, PADDLE_HEIGHT)),None]
     
     def __str__(self):
         return f"{self.id}"
     
     def add_new_player(self):
-        if self.player_two_paddle is not None:
+        if self.paddle[1] is not None:
             raise ValueError("Game already has two players")
 
         screen_width, screen_height = self.screen_size
-        self.player_two_paddle = Paddle(Rect(screen_width-20,(screen_height-PADDLE_HEIGHT)/2, PADDLE_WIDTH, PADDLE_HEIGHT))
+        self.paddle[1] = Paddle(Rect(screen_width-20,(screen_height-PADDLE_HEIGHT)/2, PADDLE_WIDTH, PADDLE_HEIGHT))
     
     def transform_game_state(self, player_id: int) -> GameState:
         game_state = GameState()
@@ -50,13 +48,13 @@ class Game(object):
 
         game_state.ball = self.ball.rect
         game_state.ball_velocity = self.ball.velocity
-        
-        game_state.player_one_paddle_rect = self.player_one_paddle.rect
+        print(game_state.player_id)
+        game_state.paddle_rect[0] = self.paddle[0].rect
 
-        if self.player_two_paddle is not None:
-            game_state.player_two_paddle_rect = self.player_two_paddle.rect
+        if self.paddle[1] is not None:
+            game_state.paddle_rect[1] = self.paddle[1].rect
         else:
-            game_state.player_two_paddle_rect = None
+            game_state.paddle_rect[1] = None
 
         return game_state
 
@@ -65,14 +63,17 @@ class Game(object):
             raise ValueError("Invalid game being updated")
 
         # Boolean indicating that the game started
-        start = self.player_two_paddle is not None
+        start = self.paddle[1] is not None
 
         if start:
             # If game started, update overall game logic
-            if game_state.player_id == 0:
-                self.player_one_paddle.update(game_state.player_one_paddle_rect)
-            else:
-                self.player_two_paddle.update(game_state.player_two_paddle_rect)
+            # self.paddle[int(game_state.player_id)].update(game_state.paddle_rect[int(game_state.player_id)])
+            # if game_state.player_id == 0:
+            #     self.paddle[0].update(game_state.paddle_rect[0])
+            # else:
+            #     self.paddle[1].update(game_state.paddle_rect[1])
+            self.paddle[game_state.player_id].update(game_state.paddle_rect[game_state.player_id])
         else:
             # If no opponent yet, only update first player position
-            self.player_one_paddle.update(game_state.player_one_paddle_rect)
+            # self.paddle[int(game_state.player_id)].update(game_state.paddle_rect[int(game_state.player_id)])
+            self.paddle[0].update(game_state.paddle_rect[0])
