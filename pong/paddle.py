@@ -1,12 +1,7 @@
 from pygame import Rect
 
-class Paddle(object):
+from pong.object import GameObject
+
+class Paddle(GameObject):
     def __init__(self, rect: Rect) -> None:
-        self.rect = rect
-        self.startRect = rect
-    
-    def update(self, rect: Rect) -> None:
-        self.rect = rect
-    
-    def reset(self) -> None:
-        self.rect = self.startRect
+        super().__init__(rect)
