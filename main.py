@@ -13,7 +13,7 @@
 # I suggest you use the sync variable in pongClient.py to determine how out of sync your two
 # clients are and take actions to resync the games
 
-from socket import socket, AF_INET, SOCK_STREAM
+from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
 from threading import Thread
 from pickle import loads, dumps
 
@@ -40,10 +40,13 @@ def handle_client(client_socket: socket, addr, game_id: str, player_id: int) -> 
 
         # Send initial game state to set up player screen and board
         initial_game_state = my_game.transform_game_state(player_id)
-        client_socket.send(dumps(initial_game_state))
+
+        serialized_initial_game_state = dumps(initial_game_state)
+        client_socket.sendall(serialized_initial_game_state)
 
         while True:
             try:
+                # Receive updates from client
                 received_data = client_socket.recv(BUFFER_SIZE)
                 receive_game_state: GameState | None = loads(received_data)
 
@@ -52,8 +55,11 @@ def handle_client(client_socket: socket, addr, game_id: str, player_id: int) -> 
                     break
 
                 my_game.update_game_state(receive_game_state)
+
+                # Send updated information back to client
                 send_game_state = my_game.transform_game_state(player_id)
-                client_socket.sendall(dumps(send_game_state))
+                serialized_game_state = dumps(send_game_state)
+                client_socket.sendall(serialized_game_state)
             except Exception as e:
                 print(f"Error when updating game state: {e}")
                 break
@@ -71,15 +77,16 @@ def find_game(game_id: str) -> Game:
 def find_or_create_game() -> tuple[str, str]:
     if len(open_games) > 0:
         # If there are active games, find a game that can be joined
-        print("Matching")
         open_game = open_games.pop(0)
-        open_game.add_new_player()
+        open_game.add_new_player(1)
+
+        open_game.start_game()
         ongoing_games[open_game.id] = open_game
         return open_game.id, 1
     
     # Need to create a game since cannot join a game or no games available
-    print("Creating new game")
     game = Game()
+    game.add_new_player(0)
     open_games.append(game)
     return game.id, 0
 
@@ -88,6 +95,7 @@ def main():
 
         # Initialize socket server
         server = socket(AF_INET, SOCK_STREAM)
+        server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         server.bind((SERVER_IP, SERVER_PORT))
         server.listen()
         
