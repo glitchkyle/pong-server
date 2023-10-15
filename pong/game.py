@@ -21,6 +21,7 @@ class GameState(object):
         self.paddle_rect: list[TupleRect | None] = [None, None]
         self.ball: TupleRect = None
         self.ball_velocity: tuple[int, int] = (0, 0)
+        self.again: list[bool] = [False,False]
 
 class Game(object):
     def __init__(self, ball_size: int = BALL_SIZE, screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT)):
@@ -34,6 +35,7 @@ class Game(object):
         rect = Rect(screen_width/2, screen_height/2, ball_size, ball_size)
         self.ball = Ball(rect)
         self.paddle: list[Paddle | None] = [None, None]
+        self.again: list[bool] = [False,False]
     
     def __str__(self):
         return f"Game {self.id} [Start: {self.start}] - {self.scores}"
@@ -74,6 +76,8 @@ class Game(object):
         game_state.paddle_rect = [None, None]
         game_state.paddle_rect[0] = None if self.paddle[0] is None else self.paddle[0].to_tuple_rect()
         game_state.paddle_rect[1] = None if self.paddle[1] is None else self.paddle[1].to_tuple_rect()
+        
+        game_state.again = self.again
 
         return game_state
 
@@ -82,7 +86,7 @@ class Game(object):
             raise ValueError("Invalid game being updated")
 
         id = game_state.player_id
-
+        self.again[id] = game_state.again[id]
         self.scores = game_state.scores
 
         if self.paddle[id] is not None and game_state.paddle_rect[id] is not None:
