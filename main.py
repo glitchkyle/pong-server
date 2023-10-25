@@ -1,8 +1,23 @@
+# =================================================================================================
+# Contributing Authors:	    <Anyone who touched the code>
+# Email Addresses:          <Your uky.edu email addresses>
+# Date:                     <The date the file was last edited>
+# Purpose:                  <How this file contributes to the project>
+# Misc:                     <Not Required.  Anything else you might want to include>
+# =================================================================================================
+
+# Use this file to write your server logic
+# You will need to support at least two clients
+# You will need to keep track of where on the screen (x,y coordinates) each paddle is, the score 
+# for each player and where the ball is, and relay that to each client
+# I suggest you use the sync variable in pongClient.py to determine how out of sync your two
+# clients are and take actions to resync the games
+
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
 from threading import Thread
 from pickle import loads, dumps
 
-from config.constants import SOCKET_IP, SOCKET_PORT, BUFFER_SIZE
+from config.constants import SERVER_IP, SERVER_PORT, BUFFER_SIZE
 
 from pong.game import Game, GameState
 
@@ -54,13 +69,11 @@ def handle_client(client_socket: socket, addr, game_id: str, player_id: int) -> 
     finally:
         client_socket.close()
 
-
 def find_game(game_id: str) -> Game:
     for game in open_games:
         if game.id == game_id:
             return game
-
-
+    
 def find_or_create_game() -> tuple[str, str]:
     if len(open_games) > 0:
         # If there are active games, find a game that can be joined
@@ -70,13 +83,12 @@ def find_or_create_game() -> tuple[str, str]:
         open_game.start_game()
         ongoing_games[open_game.id] = open_game
         return open_game.id, 1
-
+    
     # Need to create a game since cannot join a game or no games available
     game = Game()
     game.add_new_player(0)
     open_games.append(game)
     return game.id, 0
-
 
 def main():
     try:
@@ -84,33 +96,23 @@ def main():
         # Initialize socket server
         server = socket(AF_INET, SOCK_STREAM)
         server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-        server.bind((SOCKET_IP, SOCKET_PORT))
+        server.bind((SERVER_IP, SERVER_PORT))
         server.listen()
-
-        print(f"Socket server listening on {SOCKET_IP}:{SOCKET_PORT}")
+        
+        print(f"Socket server listening on {SERVER_IP}:{SERVER_PORT}")
 
         while True:
-            # TODO: Authentication
             client_socket, addr = server.accept()
             print(f"Accepted connection from {addr[0]}:{addr[1]}")
 
             game_id, player_id = find_or_create_game()
-            thread = Thread(
-                target=handle_client,
-                args=(
-                    client_socket,
-                    addr,
-                    game_id,
-                    player_id,
-                ),
-            )
+            thread = Thread(target=handle_client, args=(client_socket, addr, game_id, player_id,))
             thread.start()
 
     except Exception as e:
         print(f"Server Error: {e}")
     finally:
         server.close()
-
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,2 @@
-asgiref==3.7.2
-Django==4.2.6
 pygame==2.5.2
-sqlparse==0.4.4
-typing_extensions==4.8.0
 uuid==1.30

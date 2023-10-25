@@ -1,28 +1,18 @@
 from uuid import uuid1
 from pygame import Rect
 
-from config.constants import (
-    DEFAULT_SCREEN_WIDTH,
-    DEFAULT_SCREEN_HEIGHT,
-    BALL_SIZE,
-    PADDLE_WIDTH,
-    PADDLE_HEIGHT,
-)
+from config.constants import DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, BALL_SIZE, PADDLE_WIDTH, PADDLE_HEIGHT
 from pong.ball import Ball
 from pong.paddle import Paddle
 
-TupleRect = tuple[int, int, int, int]
-
+TupleRect = tuple[int, int, int ,int]
 
 class GameState(object):
     def __init__(self):
         # Read Only
         self.game_id: str
         self.player_id: int
-        self.screen_size: tuple[int, int] = (
-            DEFAULT_SCREEN_WIDTH,
-            DEFAULT_SCREEN_HEIGHT,
-        )
+        self.screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT)
 
         # Read and Write
         self.message: str
@@ -32,13 +22,8 @@ class GameState(object):
         self.ball: TupleRect = None
         self.ball_velocity: tuple[int, int] = (0, 0)
 
-
 class Game(object):
-    def __init__(
-        self,
-        ball_size: int = BALL_SIZE,
-        screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT),
-    ):
+    def __init__(self, ball_size: int = BALL_SIZE, screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT)):
         self.id = str(uuid1())
         self.start = False
         self.scores = (0, 0)
@@ -46,40 +31,33 @@ class Game(object):
         self.screen_size: tuple[int, int] = screen_size
 
         screen_width, screen_height = screen_size
-        rect = Rect(screen_width / 2, screen_height / 2, ball_size, ball_size)
+        rect = Rect(screen_width/2, screen_height/2, ball_size, ball_size)
         self.ball = Ball(rect)
         self.paddle: list[Paddle | None] = [None, None]
-
+    
     def __str__(self):
         return f"Game {self.id} [Start: {self.start}] - {self.scores}"
-
+    
     def start_game(self):
         if self.start:
             raise ValueError("Already started")
-
+        
         self.start = True
-
+    
     def add_new_player(self, player_id: int):
         if self.paddle[0] is not None and self.paddle[1] is not None:
             raise ValueError(f"Game already has reached maximum of 2 players")
 
         screen_width, screen_height = self.screen_size
         if player_id == 0:
-            rect = Rect(
-                10, (screen_height - PADDLE_HEIGHT) / 2, PADDLE_WIDTH, PADDLE_HEIGHT
-            )
+            rect = Rect(10,(screen_height-PADDLE_HEIGHT)/2, PADDLE_WIDTH, PADDLE_HEIGHT)
             self.paddle[0] = Paddle(rect)
         elif player_id == 1:
-            rect = Rect(
-                screen_width - 20,
-                (screen_height - PADDLE_HEIGHT) / 2,
-                PADDLE_WIDTH,
-                PADDLE_HEIGHT,
-            )
+            rect = Rect(screen_width-20,(screen_height-PADDLE_HEIGHT)/2, PADDLE_WIDTH, PADDLE_HEIGHT)
             self.paddle[1] = Paddle(rect)
         else:
             raise ValueError(f"Invalid player id {player_id}")
-
+    
     def transform_game_state(self, player_id: int) -> GameState:
         game_state = GameState()
 
@@ -94,12 +72,8 @@ class Game(object):
         game_state.ball_velocity = self.ball.velocity
 
         game_state.paddle_rect = [None, None]
-        game_state.paddle_rect[0] = (
-            None if self.paddle[0] is None else self.paddle[0].to_tuple_rect()
-        )
-        game_state.paddle_rect[1] = (
-            None if self.paddle[1] is None else self.paddle[1].to_tuple_rect()
-        )
+        game_state.paddle_rect[0] = None if self.paddle[0] is None else self.paddle[0].to_tuple_rect()
+        game_state.paddle_rect[1] = None if self.paddle[1] is None else self.paddle[1].to_tuple_rect()
 
         return game_state
 
