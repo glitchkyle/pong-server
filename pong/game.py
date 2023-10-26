@@ -25,6 +25,7 @@ class GameState(object):
         )
 
         # Read and Write
+        self.sync = 0
         self.message: str
         self.start: bool = False
         self.scores: tuple[int, int] = (0, 0)
@@ -40,6 +41,7 @@ class Game(object):
         screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT),
     ):
         self.id = str(uuid1())
+        self.sync = 0
         self.start = False
         self.scores = (0, 0)
 
@@ -83,8 +85,8 @@ class Game(object):
     def transform_game_state(self, player_id: int) -> GameState:
         game_state = GameState()
 
-        game_state.message = "I am the server"
         game_state.player_id = player_id
+        game_state.sync = self.sync
         game_state.game_id = self.id
         game_state.start = self.start
         game_state.scores = self.scores
@@ -108,15 +110,23 @@ class Game(object):
             raise ValueError("Invalid game being updated")
 
         id = game_state.player_id
-
-        self.scores = game_state.scores
-
+        
+        # Update Paddles
         if self.paddle[id] is not None and game_state.paddle_rect[id] is not None:
             x, y, w, h = game_state.paddle_rect[id]
             paddle_rect = Rect(x, y, w, h)
             self.paddle[id].update(paddle_rect)
 
         if game_state.start:
-            x, y, w, h = game_state.ball
-            ball_rect = Rect(x, y, w, h)
-            self.ball.update(ball_rect, game_state.ball_velocity)
+            # If game has started
+
+            if game_state.sync > self.sync:
+                self.sync = game_state.sync
+
+                # Update Scores
+                self.scores = game_state.scores
+
+                # Update Ball
+                x, y, w, h = game_state.ball
+                ball_rect = Rect(x, y, w, h)
+                self.ball.update(ball_rect, game_state.ball_velocity)
