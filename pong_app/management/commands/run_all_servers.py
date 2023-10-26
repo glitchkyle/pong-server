@@ -1,31 +1,22 @@
+from django.core.management.commands.runserver import Command as BaseCommand
+
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR
+from config.constants import SOCKET_IP, SOCKET_PORT, BUFFER_SIZE
 from threading import Thread
 from pickle import loads, dumps
 
-from config.constants import SOCKET_IP, SOCKET_PORT, BUFFER_SIZE
+from socket_server.server import SocketServer
+from pong.game import GameState
+from pong_app.models import User
 
-from pong.game import Game, GameState
-
-# Queue for available games
-open_games: list[Game] = []
-
-# Current ongoing games with two players
-ongoing_games: dict[str, Game] = {}
-
-def handle_client(client_socket: socket, addr, game_id: str, player_id: int) -> None:
+def handle_client(socket_server: SocketServer, client_socket: socket, game_id: str, player_id: int) -> None:
     try:
 
         # Find the client's game
-        if game_id in ongoing_games:
-            # Opponent found
-            my_game = ongoing_games[game_id]
-        else:
-            # Waiting for opponent
-            my_game = find_game(game_id)
+        my_game = socket_server.find_player_game(game_id)
 
         # Send initial game state to set up player screen and board
         initial_game_state = my_game.transform_game_state(player_id)
-
         serialized_initial_game_state = dumps(initial_game_state)
         client_socket.sendall(serialized_initial_game_state)
 
@@ -38,7 +29,8 @@ def handle_client(client_socket: socket, addr, game_id: str, player_id: int) -> 
                 if not receive_game_state:
                     print("Game state not received")
                     break
-
+                
+                # Update game based on new information
                 my_game.update_game_state(receive_game_state)
 
                 # Send updated information back to client
@@ -55,33 +47,8 @@ def handle_client(client_socket: socket, addr, game_id: str, player_id: int) -> 
         client_socket.close()
 
 
-def find_game(game_id: str) -> Game:
-    for game in open_games:
-        if game.id == game_id:
-            return game
-
-
-def find_or_create_game() -> tuple[str, str]:
-    if len(open_games) > 0:
-        # If there are active games, find a game that can be joined
-        open_game = open_games.pop(0)
-        open_game.add_new_player(1)
-
-        open_game.start_game()
-        ongoing_games[open_game.id] = open_game
-        return open_game.id, 1
-
-    # Need to create a game since cannot join a game or no games available
-    game = Game()
-    game.add_new_player(0)
-    open_games.append(game)
-    return game.id, 0
-
-
-def main():
+def run_socket_server(socket_server_instance: SocketServer):
     try:
-
-        # Initialize socket server
         server = socket(AF_INET, SOCK_STREAM)
         server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         server.bind((SOCKET_IP, SOCKET_PORT))
@@ -94,12 +61,12 @@ def main():
             client_socket, addr = server.accept()
             print(f"Accepted connection from {addr[0]}:{addr[1]}")
 
-            game_id, player_id = find_or_create_game()
+            game_id, player_id = socket_server_instance.find_or_create_game()
             thread = Thread(
                 target=handle_client,
                 args=(
+                    socket_server_instance,
                     client_socket,
-                    addr,
                     game_id,
                     player_id,
                 ),
@@ -112,5 +79,14 @@ def main():
         server.close()
 
 
-if __name__ == "__main__":
-    main()
+class Command(BaseCommand):
+    help = 'Initializes Django server and Pong socket server'
+
+    def handle(self, *args, **options):
+        print("Initializing socket server")
+        socket_server = SocketServer()
+        socket_thread = Thread(target=run_socket_server, args=(socket_server,))
+        socket_thread.start()
+
+        print("Initializing Django server")
+        super().handle(*args, **options)

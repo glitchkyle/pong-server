@@ -105,7 +105,7 @@ class Game(object):
 
         return game_state
 
-    def update_game_state(self, game_state: GameState) -> GameState:
+    def update_game_state(self, game_state: GameState) -> None:
         if game_state.game_id != self.id:
             raise ValueError("Invalid game being updated")
 
