@@ -9,14 +9,14 @@ from socket_server.server import SocketServer
 from pong.game import GameState
 from pong_app.models import User
 
-def handle_client(socket_server: SocketServer, client_socket: socket, game_id: str, player_id: int) -> None:
+def handle_client(socket_server: SocketServer, client_socket: socket, game_id: str, player_id: int, player_name:str) -> None:
     try:
 
         # Find the client's game
         my_game = socket_server.find_player_game(game_id)
 
         # Send initial game state to set up player screen and board
-        initial_game_state = my_game.transform_game_state(player_id)
+        initial_game_state = my_game.transform_game_state(player_id, player_name)
         serialized_initial_game_state = dumps(initial_game_state)
         client_socket.sendall(serialized_initial_game_state)
 
@@ -31,10 +31,10 @@ def handle_client(socket_server: SocketServer, client_socket: socket, game_id: s
                     break
                 
                 # Update game based on new information
-                my_game.update_game_state(receive_game_state)
+                my_game.update_game(receive_game_state)
 
                 # Send updated information back to client
-                send_game_state = my_game.transform_game_state(player_id)
+                send_game_state = my_game.transform_game_state(player_id, player_name)
                 serialized_game_state = dumps(send_game_state)
                 client_socket.sendall(serialized_game_state)
             except Exception as e:
@@ -59,9 +59,10 @@ def run_socket_server(socket_server_instance: SocketServer):
         while True:
             # TODO: Authentication
             client_socket, addr = server.accept()
+            player_name = client_socket.recv(BUFFER_SIZE).decode()
             print(f"Accepted connection from {addr[0]}:{addr[1]}")
 
-            game_id, player_id = socket_server_instance.find_or_create_game()
+            game_id, player_id = socket_server_instance.find_or_create_game(player_name)
             thread = Thread(
                 target=handle_client,
                 args=(
@@ -69,6 +70,7 @@ def run_socket_server(socket_server_instance: SocketServer):
                     client_socket,
                     game_id,
                     player_id,
+                    player_name
                 ),
             )
             thread.start()

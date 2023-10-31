@@ -19,6 +19,7 @@ class GameState(object):
         # Read Only
         self.game_id: str
         self.player_id: int
+        self.player_name: str
         self.screen_size: tuple[int, int] = (
             DEFAULT_SCREEN_WIDTH,
             DEFAULT_SCREEN_HEIGHT,
@@ -41,6 +42,7 @@ class Game(object):
         screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT),
     ):
         self.id = str(uuid1())
+        self.player_names:list[str | None] = [None,None]
         self.sync = 0
         self.start = False
         self.scores = (0, 0)
@@ -61,7 +63,7 @@ class Game(object):
 
         self.start = True
 
-    def add_new_player(self, player_id: int):
+    def add_new_player(self, player_id: int, player_name:str):
         if self.paddle[0] is not None and self.paddle[1] is not None:
             raise ValueError(f"Game already has reached maximum of 2 players")
 
@@ -71,6 +73,7 @@ class Game(object):
                 10, (screen_height - PADDLE_HEIGHT) / 2, PADDLE_WIDTH, PADDLE_HEIGHT
             )
             self.paddle[0] = Paddle(rect)
+            self.player_names[0] = player_name
         elif player_id == 1:
             rect = Rect(
                 screen_width - 20,
@@ -79,13 +82,15 @@ class Game(object):
                 PADDLE_HEIGHT,
             )
             self.paddle[1] = Paddle(rect)
+            self.player_names[1] = player_name
         else:
             raise ValueError(f"Invalid player id {player_id}")
 
-    def transform_game_state(self, player_id: int) -> GameState:
+    def transform_game_state(self, player_id: int, player_name) -> GameState:
         game_state = GameState()
 
         game_state.player_id = player_id
+        game_state.player_name = player_name
         game_state.sync = self.sync
         game_state.game_id = self.id
         game_state.start = self.start
@@ -105,7 +110,10 @@ class Game(object):
 
         return game_state
 
-    def update_game_state(self, game_state: GameState) -> None:
+    def update_game(self, game_state: GameState) -> None:
+        if self.player_names[1] is not None:
+            self.start = True
+            
         if game_state.game_id != self.id:
             raise ValueError("Invalid game being updated")
 

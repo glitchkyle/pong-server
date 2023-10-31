@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration</title>
+</head>
+<body>
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %} {# Include the CSRF token for security #}
+        {{ form.as_p }} {# Render the form fields as paragraphs #}
+
+        <button type="submit">Register</button>
+    </form>
+</body>
+</html>
