@@ -1,19 +1,85 @@
-<h1>Leaderboard</h1>
-{% if user_list %}
-    <table style="border: 1px solid black;">
-        <tr>
-            <th style="border: 1px solid black;">Username</th>
-            <th style="border: 1px solid black;">Wins</th>
-            <th style="border: 1px solid black;">Games</th>
-        </tr>
-        {% for user in user_list %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 4em;
+            color: #2c3e50;
+            padding: 20px 0;
+            margin-bottom: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #3498db;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #ecf0f1;
+        }
+
+        p {
+            text-align: center;
+            padding: 20px;
+            font-size: 1em;
+        }
+
+       
+        tr:nth-child(even) {
+            background-color: #fffdd0;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+
+    {% if user_list %}
+        <table style="border: 1px solid black;">
             <tr>
-                <td style="border: 1px solid black;">{{user.username}}</td>
-                <td style="border: 1px solid black;">{{user.wins}}</td>
-                <td style="border: 1px solid black;">{{user.games}}</td>
+                <th style="border: 1px solid black;">Username</th>
+                <th style="border: 1px solid black;">Wins</th>
+                <th style="border: 1px solid black;">Games</th>
             </tr>
-        {% endfor %}
-    <table>
-{% else %}
-    <p>No users are available.</p>
-{% endif %}
+            {% for user in user_list %}
+                <tr>
+                    <td style="border: 1px solid black;">{{user.username}}</td>
+                    <td style="border: 1px solid black;">{{user.wins}}</td>
+                    <td style="border: 1px solid black;">{{user.games}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No users are available.</p>
+    {% endif %}
+</body>
+</html>
+
+
