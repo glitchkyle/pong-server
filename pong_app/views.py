@@ -36,13 +36,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return render(request, 'success.html', {'username': username})  # Redirect to a success page after registration
+            return index(request)  # Redirect to a success page after registration
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
-
-def success_view(request):
-    if request:
-        user_list = User.objects.all()
-        context = {"user_list": user_list}
-        return render(request, "pong_app/index.html", context)

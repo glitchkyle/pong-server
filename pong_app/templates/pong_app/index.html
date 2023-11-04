@@ -10,10 +10,11 @@
             <tr>
                 <td style="border: 1px solid black;">{{user.username}}</td>
                 <td style="border: 1px solid black;">{{user.wins}}</td>
-                <td style="border: 1px solid black;">{{user.games}}</td>
+                <td style="border: 1px solid black;">{{user.games}}</td> 
             </tr>
         {% endfor %}
     <table>
+    <a href="/app/register">Register</a>
 {% else %}
     <p>No users are available.</p>
 {% endif %}
