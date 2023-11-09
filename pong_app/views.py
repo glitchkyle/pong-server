@@ -13,7 +13,7 @@ def index(request):
     return render(request, "pong_app/index.html", context)
 
 class AuthenticationView(APIView):
-    def post(self, request, format=None):
+    def post(self, request):
         # Get the username and password from the request data
         username = request.data.get('username')
         password = request.data.get('password')
@@ -31,7 +31,6 @@ class AuthenticationView(APIView):
 
 def register_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
