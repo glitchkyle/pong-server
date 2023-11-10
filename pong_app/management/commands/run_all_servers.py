@@ -7,7 +7,8 @@ from pickle import loads, dumps
 
 from socket_server.server import SocketServer
 from pong.game import GameState
-from pong_app.models import User
+import ssl
+from pong_app.views import authenticationUser,register_user
 
 def handle_client(socket_server: SocketServer, client_socket: socket, game_id: str, player_id: int, player_name:str) -> None:
     try:
@@ -59,18 +60,31 @@ def run_socket_server(socket_server_instance: SocketServer):
         while True:
             # TODO: Authentication
             client_socket, addr = server.accept()
-            player_name = client_socket.recv(BUFFER_SIZE).decode()
+            print(f"Accepted connection from {addr[0]}:{addr[1]}")
+            server_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+            server_context.load_cert_chain(certfile="./certificate.pem",keyfile="./key.pem")
+            wrapped_server_socket = server_context.wrap_socket(client_socket,server_side=True)
+            player_credentials = wrapped_server_socket.recv(BUFFER_SIZE)
+            player = loads(player_credentials)
+            
+            if ('confirm_password' in player and register_user(player)) or authenticationUser(player):
+                wrapped_server_socket.sendall(b"Success")
+            else:
+                wrapped_server_socket.sendall(b"Authentication failed")
+                wrapped_server_socket.close()
+                continue 
             print(f"Accepted connection from {addr[0]}:{addr[1]}")
 
-            game_id, player_id = socket_server_instance.find_or_create_game(player_name)
+            game_id, player_id = socket_server_instance.find_or_create_game(player['username'])
+
             thread = Thread(
                 target=handle_client,
                 args=(
                     socket_server_instance,
-                    client_socket,
+                    wrapped_server_socket,
                     game_id,
                     player_id,
-                    player_name
+                    player['username']
                 ),
             )
             thread.start()
@@ -79,6 +93,7 @@ def run_socket_server(socket_server_instance: SocketServer):
         print(f"Server Error: {e}")
     finally:
         server.close()
+        wrapped_server_socket.close()
 
 
 class Command(BaseCommand):
