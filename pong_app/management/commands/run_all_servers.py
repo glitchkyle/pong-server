@@ -34,7 +34,6 @@ def handle_client(socket_server: SocketServer, client_socket: socket, game_id: s
 
             # Send updated information back to client
             send_game_state = my_game.transform_game_state(player_id, player_name)
-            print(f"{send_game_state.start}-{send_game_state.again}")
             serialized_game_state = dumps(send_game_state)
             client_socket.sendall(serialized_game_state)
 
@@ -89,7 +88,6 @@ def run_socket_server(socket_server_instance: SocketServer):
         print(f"Server Error: {e}")
     finally:
         server.close()
-        wrapped_server_socket.close()
 
 
 class Command(BaseCommand):
