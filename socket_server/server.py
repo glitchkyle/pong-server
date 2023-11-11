@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from pong.game import Game
 
 class SocketServer(object):
@@ -14,11 +12,14 @@ class SocketServer(object):
     def enqueue(self, game: Game) -> None:
         self.matching_queue.append(game)
 
-    def dequeue(self) -> Game | None:
+    def dequeue(self, player_name:str) :
         if len(self.matching_queue) == 0: 
             return None
         
-        return self.matching_queue.pop(0)
+        for index, game in enumerate(self.matching_queue):
+            if game.player_names[0] != player_name:
+                return self.matching_queue.pop(index)
+        return None
     
     def find_game_in_queue(self, game_id: str) -> Game:
         # TODO: Handle case when game cannot be found
@@ -32,19 +33,19 @@ class SocketServer(object):
         else:
             return self.find_game_in_queue(game_id)
 
-    def find_or_create_game(self, user_id: str | None = None) -> tuple[str, int]:
-        open_game = self.dequeue()
+    def find_or_create_game(self, player_name: str) -> tuple[str, int]:
+        open_game = self.dequeue(player_name)
 
         if open_game is not None:
             player_id = 1
-            open_game.add_new_player(player_id)
+            open_game.add_new_player(player_id, player_name)
             open_game.start_game()
             self.ongoing_games[open_game.id] = open_game
             return open_game.id, player_id
         else:
             player_id = 0
             game = Game()
-            game.add_new_player(player_id)
+            game.add_new_player(player_id, player_name)
             self.enqueue(game)
             return game.id, player_id
 
