@@ -10,9 +10,8 @@ from pong.game import GameState
 import ssl
 from pong_app.views import authenticationUser,register_user
 
-def handle_client(socket_server: SocketServer, client_socket: socket, game_id: str, player_id: int, player_name: str) -> None:
+def handle_client(socket_server: SocketServer, client_socket: ssl.SSLSocket, game_id: str, player_id: int, player_name: str) -> None:
     try:
-
         # Find the client's game
         my_game = socket_server.find_player_game(game_id)
 
@@ -45,8 +44,13 @@ def handle_client(socket_server: SocketServer, client_socket: socket, game_id: s
 
 
 def run_socket_server(socket_server_instance: SocketServer):
+    server = socket(AF_INET, SOCK_STREAM)
     try:
-        server = socket(AF_INET, SOCK_STREAM)
+        context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+
+        # Load the server's certificate and private key signed by the CA
+        context.load_cert_chain(certfile="./server.crt", keyfile="./server.key")
+
         server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         server.bind((SOCKET_IP, SOCKET_PORT))
         server.listen()
@@ -56,19 +60,18 @@ def run_socket_server(socket_server_instance: SocketServer):
         while True:
             client_socket, addr = server.accept()
             print(f"Accepted connection from {addr[0]}:{addr[1]}")
-            server_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-            server_context.load_cert_chain(certfile="./certificate.pem",keyfile="./key.pem")
-            wrapped_server_socket = server_context.wrap_socket(client_socket,server_side=True)
-            player_credentials = wrapped_server_socket.recv(BUFFER_SIZE)
+
+            ssock = context.wrap_socket(client_socket, server_side=True)
+            player_credentials = ssock.recv(BUFFER_SIZE)
             player = loads(player_credentials)
-            
+
+            # TODO: Fix pls
             if ('confirm_password' in player and register_user(player)) or authenticationUser(player):
-                wrapped_server_socket.sendall(b"Success")
+                ssock.sendall(b"Success")
             else:
-                wrapped_server_socket.sendall(b"Authentication failed")
-                wrapped_server_socket.close()
-                continue 
-            print(f"Accepted connection from {addr[0]}:{addr[1]}")
+                ssock.sendall(b"Authentication failed")
+                ssock.close()
+                continue
 
             game_id, player_id = socket_server_instance.find_or_create_game(player['username'])
 
@@ -76,14 +79,13 @@ def run_socket_server(socket_server_instance: SocketServer):
                 target=handle_client,
                 args=(
                     socket_server_instance,
-                    wrapped_server_socket,
+                    ssock,
                     game_id,
                     player_id,
                     player['username']
                 ),
             )
             thread.start()
-
     except Exception as e:
         print(f"Server Error: {e}")
     finally:
