@@ -1,9 +1,21 @@
 #!/usr/bin/env python
+"""
+Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
+Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
+Date:                     Nov 11,2023
+Purpose:                  
+"""
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
 
 def main():
+    """
+    Author:       Kyle Lastimosa
+    Purpose:     
+    Pre:         
+    Post:        
+    """ 
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pong_game.settings")
     try:

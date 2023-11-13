@@ -1,8 +1,26 @@
+"""
+Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
+Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
+Date:                     Nov 11,2023
+Purpose:                  
+"""
 from pong.game import Game
 
 class SocketServer(object):
+    """
+    Author:       Kyle Lastimosa
+    Purpose:     
+    Pre:         
+    Post:        
+    """ 
 
     def __init__(self):
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         # Queue for matching waiting players
         self.matching_queue: list[Game] =[]
 
@@ -10,9 +28,21 @@ class SocketServer(object):
         self.ongoing_games: dict[str, Game]  = {}
     
     def enqueue(self, game: Game) -> None:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         self.matching_queue.append(game)
 
     def dequeue(self, player_name:str) :
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         if len(self.matching_queue) == 0: 
             return None
         
@@ -22,18 +52,36 @@ class SocketServer(object):
         return None
     
     def find_game_in_queue(self, game_id: str) -> Game:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         # TODO: Handle case when game cannot be found
         for game in self.matching_queue:
             if game.id == game_id:
                 return game
     
     def find_player_game(self, game_id: str) -> Game:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         if game_id in self.ongoing_games:
             return self.ongoing_games[game_id]
         else:
             return self.find_game_in_queue(game_id)
 
     def find_or_create_game(self, player_name: str) -> tuple[str, int]:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         open_game = self.dequeue(player_name)
 
         if open_game is not None:

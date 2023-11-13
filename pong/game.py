@@ -1,7 +1,11 @@
+"""
+Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
+Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
+Date:                     Nov 11,2023
+Purpose:                  Game logic for managing Pong game state, including ball, paddles, and player actions.
+"""
 from uuid import uuid1
 from pygame import Rect
-
-
 
 from config.constants import (
     DEFAULT_SCREEN_WIDTH,
@@ -19,7 +23,19 @@ from pong_app.models import User
 TupleRect = tuple[int, int, int, int]
 
 class GameState(object):
+    """
+    Author:       Kyle Lastimosa
+    Purpose:     
+    Pre:         
+    Post:        
+    """ 
     def __init__(self):
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         # Read Only
         self.game_id: str
         self.player_id: int
@@ -39,11 +55,23 @@ class GameState(object):
         self.again: list[bool] = [False, False]
 
 class Game(object):
+    """
+    Author:       Kyle Lastimosa
+    Purpose:     
+    Pre:         
+    Post:        
+    """ 
     def __init__(
         self,
         ball_size: int = BALL_SIZE,
         screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT),
     ):
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         self.id = str(uuid1())
         self.player_names: list[str | None] = [None, None]
         self.sync = 0
@@ -59,9 +87,21 @@ class Game(object):
         self.again: list[bool] = [False, False]
 
     def __str__(self):
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         return f"Game {self.id} [Start: {self.start}] - {self.scores}"
-
+    
     def start_game(self):
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         if self.start:
             return
         self.start = True
@@ -70,8 +110,14 @@ class Game(object):
 
         # Helps prompt users if they want to play again
         self.again = [False, False]
-    
+
     def end_game(self):
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         if not self.start:
             return
         self.start = False
@@ -91,6 +137,12 @@ class Game(object):
         loser.save()
 
     def add_new_player(self, player_id: int, player_name: str):
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         if self.paddle[0] is not None and self.paddle[1] is not None:
             raise ValueError(f"Game already has reached maximum of 2 players")
 
@@ -114,6 +166,12 @@ class Game(object):
             raise ValueError(f"Invalid player id {player_id}")
 
     def transform_game_state(self, player_id: int, player_name) -> GameState:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         game_state = GameState()
 
         game_state.player_id = player_id
@@ -137,20 +195,44 @@ class Game(object):
         game_state.again = self.again
 
         return game_state
-    
+
     def is_game_finished(self) -> bool:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         return self.scores[0] == MAX_SCORE or self.scores[1] == MAX_SCORE
     
     def get_winner_and_loser_username(self) -> str:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         if self.scores[0] > self.scores[1]:
             return self.player_names[0], self.player_names[1]
         elif self.scores[0] < self.scores[1]:
             return self.player_names[1], self.player_names[0]
     
     def are_players_playing_again(self) -> bool:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         return self.again == [True, True]
-
+    
     def update_game(self, game_state: GameState) -> None:
+        """
+        Author:       Kyle Lastimosa
+        Purpose:     
+        Pre:         
+        Post:        
+        """ 
         if game_state.game_id != self.id:
             raise ValueError("Invalid game being updated")
 
