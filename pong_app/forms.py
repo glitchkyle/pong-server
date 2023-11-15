@@ -2,7 +2,7 @@
 Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
-Purpose:                  
+Purpose:                  To define a user registration form that inherits from Django's default UserCreationForm.
 """
 from .models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -11,9 +11,9 @@ from django import forms
 class UserRegistrationForm(UserCreationForm):
     """
     Author:       Kyle Lastimosa
-    Purpose:     
-    Pre:         
-    Post:        
+    Purpose:      Customizes user registration to include username and password.
+    Pre:          None
+    Post:         Form is ready to render and process user registration data.
     """ 
     class Meta:
         model = User

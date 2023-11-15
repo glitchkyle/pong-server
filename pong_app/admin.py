@@ -2,7 +2,7 @@
 Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
-Purpose:                  
+Purpose:                  To register the User model with the Django admin site.
 """
 from django.contrib import admin
 

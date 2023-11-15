@@ -25,16 +25,16 @@ TupleRect = tuple[int, int, int, int]
 class GameState(object):
     """
     Author:       Kyle Lastimosa
-    Purpose:     
-    Pre:         
-    Post:        
+    Purpose:      To hold the player information, scores, and the status of the game such as paddles and ball. 
+    Pre:          GameState is instantiated when a new game is created or when an existing game's state needs to be captured.
+    Post:         An object with a snapshot of the game's current state is created.
     """ 
     def __init__(self):
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To initialize the game state with default settings for a new or reset game. 
+        Pre:          Called when a new game session is started.
+        Post:         A GameState instance is created with default values for game settings and state.
         """ 
         # Read Only
         self.game_id: str
@@ -57,9 +57,9 @@ class GameState(object):
 class Game(object):
     """
     Author:       Kyle Lastimosa
-    Purpose:     
-    Pre:         
-    Post:        
+    Purpose:      Managing the game's players, ball, scores, and the state of the game.
+    Pre:          Game is initiated when players are ready to start a new pong match.
+    Post:         A new game instance is created with initialized players, ball, and scorekeeping.
     """ 
     def __init__(
         self,
@@ -68,9 +68,9 @@ class Game(object):
     ):
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      Initializes the game with settings for ball and screen size.
+        Pre:          Instantiation of a new game.
+        Post:         Game instance created with unique ID and initial settings.
         """ 
         self.id = str(uuid1())
         self.player_names: list[str | None] = [None, None]
@@ -89,18 +89,18 @@ class Game(object):
     def __str__(self):
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      Provides a string summary of the game's state.
+        Pre:          Game object exists.
+        Post:         String with game ID, start status, and scores returned.
         """ 
         return f"Game {self.id} [Start: {self.start}] - {self.scores}"
     
     def start_game(self):
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To begin the game, resetting scores and positions to their starting state.
+        Pre:          Game instance must be created and players should be ready to start.
+        Post:         The game starts with the ball reset to the center and scores set to zero.
         """ 
         if self.start:
             return
@@ -114,9 +114,9 @@ class Game(object):
     def end_game(self):
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To end the current game, record the final scores, and determine the winner and loser.
+        Pre:          The game must have started and a win condition must be met.
+        Post:         The game is ended, the winner's and loser's records are updated.
         """ 
         if not self.start:
             return
@@ -139,9 +139,9 @@ class Game(object):
     def add_new_player(self, player_id: int, player_name: str):
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To add a new player to the game with a specified player ID and name.
+        Pre:          There must be an available slot in the game.
+        Post:         A new player is added to the game.
         """ 
         if self.paddle[0] is not None and self.paddle[1] is not None:
             raise ValueError(f"Game already has reached maximum of 2 players")
@@ -168,9 +168,9 @@ class Game(object):
     def transform_game_state(self, player_id: int, player_name) -> GameState:
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To create a GameState object representing the current state of the game from the perspective of a given player.
+        Pre:          The game must be initialized and contain the current states of game.
+        Post:         A GameState object is returned with information about the specified player.
         """ 
         game_state = GameState()
 
@@ -199,18 +199,18 @@ class Game(object):
     def is_game_finished(self) -> bool:
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To check if the game has reached a win condition based on scores.
+        Pre:          The game must be in progress with scores being tracked.
+        Post:         Returns True if a win condition is met, otherwise false.
         """ 
         return self.scores[0] == MAX_SCORE or self.scores[1] == MAX_SCORE
     
     def get_winner_and_loser_username(self) -> str:
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To determine the winner and loser of the game based on the current scores.
+        Pre:          The game should have ended with a clear win condition.
+        Post:         Returns the usernames of the winner and loser.
         """ 
         if self.scores[0] > self.scores[1]:
             return self.player_names[0], self.player_names[1]
@@ -220,18 +220,18 @@ class Game(object):
     def are_players_playing_again(self) -> bool:
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To check if both players have indicated to play another game.
+        Pre:          The game has ended and players are prompted to play again.
+        Post:         Returns True if both players want to play again, otherwise false.
         """ 
         return self.again == [True, True]
     
     def update_game(self, game_state: GameState) -> None:
         """
         Author:       Kyle Lastimosa
-        Purpose:     
-        Pre:         
-        Post:        
+        Purpose:      To update the game state with a new GameState object, reflecting any changes made by the players.
+        Pre:          The game must be initialized and a valid GameState object must be provided.
+        Post:         The game's state is updated to reflect the changes provided by the GameState object, including scores and positions of game.
         """ 
         if game_state.game_id != self.id:
             raise ValueError("Invalid game being updated")
