@@ -3,6 +3,7 @@ Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
 Purpose:                  To provide views for user authentication and registration within the pong_app application.
+ChatGPT generated some of these comments for the function
 """
 from django.contrib.auth import authenticate
 

@@ -3,6 +3,7 @@ Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
 Purpose:                  initialize and manage a secure socket server for a multiplayer pong game 
+ChatGPT generated some of these comments for the function
 """
 from django.core.management.commands.runserver import Command as BaseCommand
 

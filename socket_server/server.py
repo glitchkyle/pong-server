@@ -2,7 +2,8 @@
 Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
-Purpose:                  Manages the queue and active games for a socket-based multiplayer game server. 
+Purpose:                  Manages the queue and active games for a socket-based multiplayer game server.
+ChatGPT generated some of these comments for the function 
 """
 from pong.game import Game
 

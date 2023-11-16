@@ -2,7 +2,8 @@
 Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
-Purpose:                  Extension of GameObject to represent a paddle in the game. 
+Purpose:                  Extension of GameObject to represent a paddle in the game.
+ChatGPT generated some of these comments for the function 
 """
 from pygame import Rect
 
