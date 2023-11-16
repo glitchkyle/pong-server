@@ -3,6 +3,7 @@ Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
 Purpose:                  Game logic for managing Pong game state, including ball, paddles, and player actions.
+ChatGPT generated some of these comments for the function
 """
 from uuid import uuid1
 from pygame import Rect

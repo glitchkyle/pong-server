@@ -4,6 +4,7 @@ Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastim
 Date:                     Nov 11,2023
 Purpose:                  This file defines the Ball class, which represents the game ball in a Pong-like game. 
                           It includes methods for initializing, resetting, and updating the ball's position and velocity.
+ChatGPT generated some of these comments for the function                        
 """
 from pygame import Rect
 from random import randint

@@ -3,6 +3,7 @@ Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
 Purpose:                  Establishes a custom user model with a manager to support user creation and superuser creation.
+ChatGPT generated some of these comments for the function
 """
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
