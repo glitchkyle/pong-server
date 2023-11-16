@@ -4,6 +4,7 @@
 1. Python>=3.10
 
 ## Setup
-1. (Optional) Create virtual environment using venv
-2. Run `pip install -r requirements.txt`
-3. Run `python manage.py run_all_servers`
+1. Clone repository `https://github.com/glitchkyle/pong-server.git`
+2. (Optional) Activate Python virtual environment
+3. Install dependencies `pip install -r requirements.txt`
+4. Run `python manage.py run_all_servers`
