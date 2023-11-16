@@ -1,4 +1,10 @@
 """
+Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
+Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
+Date:                     Nov 11,2023
+Purpose:                  Sets up URL routing for the pong_game Django project, directing web traffic to specific views and apps. 
+"""
+"""
 URL configuration for project pong_game.
 
 The `urlpatterns` list routes URLs to views. For more information please see:

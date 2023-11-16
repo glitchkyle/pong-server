@@ -1,3 +1,9 @@
+"""
+Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
+Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
+Date:                     Nov 11,2023
+Purpose:                  initialize and manage a secure socket server for a multiplayer pong game 
+"""
 from django.core.management.commands.runserver import Command as BaseCommand
 
 from socket import socket, AF_INET, SOCK_STREAM, SOL_SOCKET, SO_REUSEADDR

@@ -1,9 +1,21 @@
 #!/usr/bin/env python
+"""
+Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
+Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
+Date:                     Nov 11,2023
+Purpose:                  Executes the Django application 
+"""
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
 
 def main():
+    """
+    Author:       Kyle Lastimosa, James Chen
+    Purpose:      Start the Django application server for administrative tasks. 
+    Pre:          Django installed, environment variables set, virtual environment activated if required.
+    Post:         Django server is running and ready for commands or HTTP requests.
+    """ 
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pong_game.settings")
     try:
