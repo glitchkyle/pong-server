@@ -11,7 +11,7 @@ import sys
 
 def main():
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      Start the Django application server for administrative tasks. 
     Pre:          Django installed, environment variables set, virtual environment activated if required.
     Post:         Django server is running and ready for commands or HTTP requests.

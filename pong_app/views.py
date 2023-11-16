@@ -12,7 +12,7 @@ from .forms import UserRegistrationForm
 
 def index(request):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      Display the homepage with a list of users.
     Pre:          HTTP request received.
     Post:         Renders the index page with user context.
@@ -23,7 +23,7 @@ def index(request):
 
 def authenticationUser(player_credentials):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      Authenticate a user based on provided credentials.
     Pre:          'player_credentials' dictionary with 'username' and 'password'.
     Post:         Returns True if authentication succeeds, False otherwise.

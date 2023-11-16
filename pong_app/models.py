@@ -9,14 +9,14 @@ from django.db import models
 
 class UserManager(BaseUserManager):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James.Chen
     Purpose:      Provides helper functions to create User or superuser instances. 
     Pre:          None
     Post:         UserManager is ready to create user instances.
     """ 
     def create_user(self, username, password=None, **extra_fields):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Creates a standard user with a username and password.
         Pre:          A username must be provided; password and extra_fields are optional.
         Post:         A User instance is created and saved to the database.
@@ -30,7 +30,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, username, password=None, **extra_fields):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Creates a superuser with admin rights.
         Pre:          A username and password must be provided; extra_fields can override default admin settings.
         Post:         A superuser instance is created and saved to the database.
@@ -43,7 +43,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      Custom User model to support additional game-related attributes.
     Pre:          None
     Post:         A User model is available for representing users in the database.
@@ -65,7 +65,7 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      To return the username as a string representation of the User.
         Pre:          A User instance must exist.
         Post:         The username string is returned.
@@ -83,7 +83,7 @@ class User(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      To determine if the user has permissions for a given app.
         Pre:          'app_label' is the name of the app.
         Post:         Returns True if the user is a superuser, otherwise false.

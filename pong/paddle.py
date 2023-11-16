@@ -10,14 +10,14 @@ from pong.object import GameObject
 
 class Paddle(GameObject):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      Represents a player's paddle in the game, extending GameObject.
     Pre:          None
     Post:         Paddle instance is created with a position and size.
     """ 
     def __init__(self, rect: Rect) -> None:
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen, Nishan Budhathoki
         Purpose:      Initializes a paddle with a given rectangle.
         Pre:          'rect' is a valid pygame.Rect instance.
         Post:         Paddle instance is initialized and ready for game logic.

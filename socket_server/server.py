@@ -8,7 +8,7 @@ from pong.game import Game
 
 class SocketServer(object):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      Handles game session management over sockets for a multiplayer game.
     Pre:          None
     Post:         SocketServer instance is created with initialized structures for game management.
@@ -53,7 +53,7 @@ class SocketServer(object):
     
     def find_game_in_queue(self, game_id: str) -> Game:
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Finds a game in the queue by ID.
         Pre:          'game_id' must correspond to a game in the queue.
         Post:         Game object with the matching ID is returned or None if not found.
@@ -65,7 +65,7 @@ class SocketServer(object):
     
     def find_player_game(self, game_id: str) -> Game:
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Retrieves an ongoing game by ID, falling back to queue search if not found.
         Pre:          'game_id' must correspond to a game in progress or in the queue.
         Post:         Game object with the matching ID is returned or None if not found.
@@ -77,7 +77,7 @@ class SocketServer(object):
 
     def find_or_create_game(self, player_name: str) -> tuple[str, int]:
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Matches a player with an open game or creates a new game if none are open.
         Pre:          'player_name' given to match or start a new game.
         Post:         Player is either added to an existing game or a new game is created and enqueued.

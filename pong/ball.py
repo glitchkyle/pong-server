@@ -13,14 +13,14 @@ from pong.object import GameObject
       
 class Ball(GameObject):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      Represents the game ball, inheriting from GameObject.
     Pre:          The GameObject class must be defined.
     Post:         An instance of the Ball class is created with the specified rectangle.     
     """ 
     def __init__(self, rect: Rect) -> None:
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Initializes the Ball object with the given rectangle and resets its state.
         Pre:          The GameObject class must be defined.
         Post:         The Ball object is initialized with the specified rectangle, and its state is reset.
@@ -30,7 +30,7 @@ class Ball(GameObject):
 
     def reset(self) -> None:
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Resets the state of the ball, including its position and velocity.
         Pre:          The Ball object must be initialized.
         Post:         The Ball object's state is reset, and it is ready for a new round.
@@ -45,7 +45,7 @@ class Ball(GameObject):
 
     def update(self, rect: Rect, velocity: tuple[int, int]):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Updates the position and velocity of the ball.
         Pre:          The Ball object must be initialized.
         Post:         The Ball object's position and velocity are updated based on the given parameters.

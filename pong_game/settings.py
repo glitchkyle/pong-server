@@ -2,7 +2,7 @@
 Contributing Authors:	  Nishan Budathoki, James Chen, Kyle Lastimos
 Email Addresses:          nishan.budhathoki@uky.edu, James.Chen@uky.edu, klastimosa001@uky.edu
 Date:                     Nov 11,2023
-Purpose:                  
+Purpose:                  configure a Django-based web application for a pong game.      
 """
 """
 Django settings for project project.

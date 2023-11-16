@@ -24,7 +24,7 @@ TupleRect = tuple[int, int, int, int]
 
 class GameState(object):
     """
-    Author:       Kyle Lastimosa
+    Author:       Kyle Lastimosa, James Chen
     Purpose:      To hold the player information, scores, and the status of the game such as paddles and ball. 
     Pre:          GameState is instantiated when a new game is created or when an existing game's state needs to be captured.
     Post:         An object with a snapshot of the game's current state is created.
@@ -67,7 +67,7 @@ class Game(object):
         screen_size: tuple[int, int] = (DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT),
     ):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Initializes the game with settings for ball and screen size.
         Pre:          Instantiation of a new game.
         Post:         Game instance created with unique ID and initial settings.
@@ -88,7 +88,7 @@ class Game(object):
 
     def __str__(self):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      Provides a string summary of the game's state.
         Pre:          Game object exists.
         Post:         String with game ID, start status, and scores returned.
@@ -113,7 +113,7 @@ class Game(object):
 
     def end_game(self):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      To end the current game, record the final scores, and determine the winner and loser.
         Pre:          The game must have started and a win condition must be met.
         Post:         The game is ended, the winner's and loser's records are updated.
@@ -138,7 +138,7 @@ class Game(object):
 
     def add_new_player(self, player_id: int, player_name: str):
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen, Nishan Budhathoki
         Purpose:      To add a new player to the game with a specified player ID and name.
         Pre:          There must be an available slot in the game.
         Post:         A new player is added to the game.
@@ -167,7 +167,7 @@ class Game(object):
 
     def transform_game_state(self, player_id: int, player_name) -> GameState:
         """
-        Author:       Kyle Lastimosa
+        Author:       Kyle Lastimosa, James Chen
         Purpose:      To create a GameState object representing the current state of the game from the perspective of a given player.
         Pre:          The game must be initialized and contain the current states of game.
         Post:         A GameState object is returned with information about the specified player.
